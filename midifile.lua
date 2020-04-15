@@ -9,10 +9,10 @@ local function parseMidi(midifile)
   local mididata = assert(io.open(midifile,'rb')) --opening binary
   local midistring = mididata:read('*all') --reading into string
   local file = {}
-  file.mainscore = midi.midi2score(midistring)
+  local mainscore = midi.midi2score(midistring)
   -- {'note', start_time, duration, channel, note, velocity} -- in a score
-  file.stats = midi.score2stats(file.mainscore)
-  file.ppq = file.mainscore[1]  --assigning ppq
+  file.stats = midi.score2stats(mainscore)
+  file.ppq = mainscore[1]  --assigning ppq
 
   --initialize our big play table
   file.playtable ={}
@@ -21,8 +21,8 @@ local function parseMidi(midifile)
     file.playtable[i]={}
   end
 
-  for itrack = 2,#file.mainscore do  -- skip 1st element, which is ticks
-    for k,event in ipairs(file.mainscore[itrack]) do
+  for itrack = 2,#mainscore do  -- skip 1st element, which is ticks
+    for k,event in ipairs(mainscore[itrack]) do
       local trackevent = event
       event.track = itrack
       table.insert(file.playtable[event[2]],event)
@@ -31,8 +31,9 @@ local function parseMidi(midifile)
   return file
 end
 -- -- print(inspect(file.flatopus))
--- io.output('midiout.txt')
--- io.write(inspect(playtable))
+local file = parseMidi("test.mid")
+io.output('midiout.txt')
+io.write(inspect(file))
 --need to make absolute time to allow the users to select loop sections, want to do this by time not just number of events....
 local clip ={
   --pg1
