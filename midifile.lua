@@ -30,11 +30,11 @@ local function parseMidi(midifile)
   end
   return file
 end
--- -- print(inspect(file.flatopus))
+
 local file = parseMidi("test.mid")
 io.output('midiout.txt')
 io.write(inspect(file))
---need to make absolute time to allow the users to select loop sections, want to do this by time not just number of events....
+
 local clip ={
   --pg1
   start=nil,
